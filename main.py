@@ -139,12 +139,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             return
 
         if time_left >= 0:
+            first_name = update.effective_user.first_name or ""
+            username_webapp_url = f"{WEBAPP}/username?user_id={user_id}&first_name={first_name}"
+            
             keyboard = [
                 [InlineKeyboardButton("𝗛𝗘𝗟𝗣 𝗚𝗨𝗜𝗗𝗘 ❕", callback_data='help')],
                 [InlineKeyboardButton("𝗔𝗨𝗧𝗢 𝗥𝗘𝗦𝗣𝗢𝗡𝗗𝗘𝗥 𝗚𝗨𝗜𝗗𝗘❕", url='https://telegra.ph/AUTO-RESPONDER-GUIDE-11-11')],
                 [InlineKeyboardButton("𝗔𝗣𝗜 𝗔𝗡𝗗 𝗛𝗔𝗦𝗛 𝗜𝗗 🎥", url='https://youtu.be/8naENmP3rg4?si=LVxsTXSSI864t6Kv')],
                 [InlineKeyboardButton("𝗟𝗢𝗚𝗜𝗡 𝗪𝗜𝗧𝗛 𝗧𝗘𝗟𝗘𝗚𝗥𝗔𝗠 🔑", callback_data='login')],
                 [InlineKeyboardButton("𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀 ⚙️", callback_data='settings')],
+                [InlineKeyboardButton("USERNAME CHECKER 🔎", web_app={"url": username_webapp_url})],
                 [InlineKeyboardButton("𝗔𝘂𝘁𝗼 𝗥𝗲𝗽𝗹𝘆 + 𝙰𝙽𝚃𝙸 𝚅𝙸𝙴𝚆 𝙾𝙽𝙲𝙴 ⚙️⚙️", callback_data='auto_reply')],
                 [InlineKeyboardButton("𝗦𝘁𝒂𝘁𝘀 📈", callback_data='refresh_stats')],
             ]          

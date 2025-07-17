@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Username Checker - FluX𝕏♛ ADSBOT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/username.css') }}">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#0088cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 12l2 2 4-4"></path>
+                    <path d="M21 12c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z"></path>
+                    <path d="M3 12c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z"></path>
+                    <path d="M12 21c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z"></path>
+                    <path d="M12 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z"></path>
+                </svg>
+            </div>
+            <h1>Username Checker</h1>
+            <p class="subtitle">Discover premium Telegram usernames with AI-powered valuation</p>
+        </div>
+
+        <!-- Usage Counter -->
+        <div class="usage-counter">
+            <div class="counter-info">
+                <span class="counter-text">Hey {{first_name}}😁, Daily Usage:</span>
+                <span class="counter-value" id="usage-count">{{ usage_count }}/3</span>
+            </div>
+            <div class="counter-reset">
+                <span id="reset-time">Resets in {{ reset_time }}</span>
+            </div>
+        </div>
+
+        <!-- Username Input Form -->
+        <div class="form-container">
+            <form id="username-form">
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <span class="username-prefix">@</span>
+                        <input type="text" id="username" name="username" placeholder="Enter username" required autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn-check" id="check-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        Analyze
+                    </button>
+                </div>
+                <input type="hidden" id="user_id" value="{{ user_id }}">
+            </form>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading-container" style="display: none;">
+            <!-- Dynamic loading content will be inserted here -->
+        </div>
+
+        <!-- Results Container -->
+        <div id="results" class="results-container" style="display: none;">
+            <!-- Available Username -->
+            <div id="available-result" class="result-card available" style="display: none;">
+                <div class="result-header">
+                    <div class="result-title">
+                        <div class="status-badge available">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            Available
+                        </div>
+                        <h2 class="result-username" id="available-username">@username</h2>
+                    </div>
+                </div>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-item">
+                        <div class="analysis-label">Rarity</div>
+                        <div class="analysis-value" id="available-rarity">Common</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-label">Estimated Value</div>
+                        <div class="analysis-value" id="available-value">0.5 TON</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-label">Confidence</div>
+                        <div class="analysis-value" id="available-confidence">85%</div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-action available" id="create-channel-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                        Create Channel
+                    </button>
+                    
+                    <button class="btn-action available secondary" id="set-username-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        Set as Username
+                    </button>
+                </div>
+            </div>
+
+            <!-- Taken Username -->
+            <div id="taken-result" class="result-card taken" style="display: none;">
+                <div class="result-header">
+                    <div class="result-title">
+                        <div class="status-badge taken">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                            Taken
+                        </div>
+                        <h2 class="result-username" id="taken-username">@username</h2>
+                    </div>
+                </div>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-item">
+                        <div class="analysis-label">Rarity</div>
+                        <div class="analysis-value" id="taken-rarity">Rare</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-label">Estimated Value</div>
+                        <div class="analysis-value" id="taken-value">5.0 TON</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-label">Confidence</div>
+                        <div class="analysis-value" id="taken-confidence">92%</div>
+                    </div>
+                </div>
+
+                <button class="btn-action taken" id="make-offer-btn">
+                    Make An Offer
+                    <img src="{{ url_for('static', filename='img/ton.svg') }}" alt="ton" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                </button>
+            </div>
+
+            <!-- Fragment Auction Result -->
+            <div id="fragment-result" class="result-card fragment" style="display: none;">
+                <div class="result-header">
+                    <div class="result-title">
+                        <div class="status-badge fragment">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                            </svg>
+                            <span id="fragment-status">Fragment Auction</span>
+                        </div>
+                        <h2 class="result-username" id="fragment-username">@username</h2>
+                    </div>
+                </div>
+
+                <div class="fragment-info">
+                    <div class="fragment-header">
+                        <div class="fragment-logo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0088cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                        </div>
+                        <div class="fragment-title">Fragment Marketplace</div>
+                    </div>
+
+                    <div id="fragment-available" class="fragment-section" style="display: none;">
+                        <div class="fragment-price-card">
+                            <div class="price-label">Minimum Bid</div>
+                            <div class="price-value">
+                                <span class="ton-amount" id="fragment-min-bid">515</span>
+                                <span class="ton-symbol">TON</span>
+                            </div>
+                            <div class="usd-value" id="fragment-usd-price">~ $1,633</div>
+                        </div>
+
+                        <div class="fragment-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Daily Decrease</div>
+                                <div class="detail-value" id="fragment-decrease">45 TON</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Minimum Price</div>
+                                <div class="detail-value" id="fragment-minimum">515 TON</div>
+                            </div>
+                        </div>
+
+                        <div class="fragment-note">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            Price decreases daily until a bid is placed
+                        </div>
+                    </div>
+
+                    <div id="fragment-sold" class="fragment-section" style="display: none;">
+                        <div class="fragment-price-card sold">
+                            <div class="price-label">Sold For</div>
+                            <div class="price-value">
+                                <span class="ton-amount" id="fragment-sold-price">1,250</span>
+                                <span class="ton-symbol">TON</span>
+                            </div>
+                            <div class="usd-value" id="fragment-sold-usd">~ $3,975</div>
+                        </div>
+                    </div>
+
+                    <div id="fragment-auction" class="fragment-section" style="display: none;">
+                        <div class="fragment-price-card auction">
+                            <div class="price-label">Current Bid</div>
+                            <div class="price-value">
+                                <span class="ton-amount" id="fragment-current-bid">750</span>
+                                <span class="ton-symbol">TON</span>
+                            </div>
+                            <div class="usd-value" id="fragment-current-usd">~ $2,385</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-grid">
+                    <div class="analysis-item">
+                        <div class="analysis-label">Rarity</div>
+                        <div class="analysis-value" id="fragment-rarity">Epic</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-label">Market Value</div>
+                        <div class="analysis-value" id="fragment-market-value">750.0 TON</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-label">Status</div>
+                        <div class="analysis-value" id="fragment-auction-status">Live Auction</div>
+                    </div>
+                </div>
+
+                <button class="btn-action fragment" id="view-fragment-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    View on Fragment
+                </button>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="success-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Channel Created Successfully!</h3>
+                    <button class="close-modal" id="close-success-modal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="success-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <p>Your channel <strong id="created-channel-name">@username</strong> has been created successfully!</p>
+                    <a href="#" id="channel-link" class="btn-primary" target="_blank">View Channel</a>
+                </div>
+            </div>
+        </div>
+         <!-- Username Confirmation Modal -->
+        <div id="username-confirm-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Confirm Username Change</h3>
+                    <button class="close-modal" id="close-username-confirm-modal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="warning-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ff9800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <p>Are you sure you want to set <strong id="confirm-username">@username</strong> as your account username?</p>
+                    <p class="warning-text">This action cannot be undone and will change your current username.</p>
+                    <div class="modal-actions">
+                        <button class="btn-secondary" id="cancel-username-btn">Cancel</button>
+                        <button class="btn-primary" id="confirm-username-btn">Confirm Change</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Username Success Modal -->
+        <div id="username-success-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Username Updated Successfully!</h3>
+                    <button class="close-modal" id="close-username-success-modal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="success-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <p>Your username has been successfully changed to <strong id="new-username">@username</strong>!</p>
+                    <button class="btn-primary" id="close-username-success-btn">Got it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/username.js') }}"></script>
+</body>
+</html>
