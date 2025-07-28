@@ -2198,84 +2198,28 @@ async def all_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
     elif query.data == 'help':
         help_text = (
-        "🤖 <b>DEVSCOTT AUTO FORWARDING Bot Help</b>\n\n"
-        "Welcome to the DEVSCOTT AUTO FORWARDING Bot! Here's a guide on how to use the available commands:\n\n"
-
-        "1. <code>/start</code> - Initiates the bot and provides subscription information.\n"
-        "   - Displays your current subscription status and expiration date, along with quick links to login and settings.\n\n"
-
-        "2. <code>/post &lt;message&gt;</code> - Sets the message to be forwarded to your groups.\n"
-        "   - Example: <code>/post Hello everyone!</code> sets the message <code>Hello everyone!</code> to be forwarded.\nSet telegram message link if you want the message to be forwarded\n"
-        "   - Use <code>/mypost</code> to check the posts you have added\n"
-        "   - Multiple Posts can be added, use <code>/delpost index \\ message</code> to delete a post\n<code>/delpost all</code> to delete all post set\n\n"
-        "2ii. <code>Message Source</code>\n<pre>/msource</pre> - Sets the source of the messages to forward.\n"
-        "   - You can choose between <b>My Post 📝</b> or <b>Saved Messages 📥</b>.\n"
-        "   - <b>My Post 📝</b> will forward messages from your post messages <code>/post message</code> (default option for all users).\n"
-        "   - <b>Saved Messages 📥</b> will forward messages from your saved messages in Telegram.\n"
-        "   - You can toggle between the sources at any time through the settings menu.\n"
-        "   - The currently selected message source will be displayed in the settings and can be changed anytime.\n\n"
-        "3. <code>/addgroup &lt;group_link&gt;</code> - Adds a group to your forwarding list.\n"
-        "   - Example: <code>/addgroup https://t.me/mygroupusername</code> adds the group with link <code> https://t.me/mygroupusername</code> to your list for message forwarding.\n\n"
-
-        "4. <code>/delgroup &lt;group_id&gt https://t.me/mygroupusername;</code> - Removes a group from your forwarding list.\n"
-        "   - Example: <code>/delgroup  https://t.me/mygroupusername</code> removes the group with link <code>https://t.me/mygroupusernam</code>.\n\n"
-
-        "5. <code>/time &lt;seconds&gt;</code> - Sets the interval between message forwarding in seconds.\n"
-        "   - Example: <code>/time 60</code> sets the message forwarding interval to 60 seconds.\n\n"
-
-        "6. <code>/on</code> - Enables automatic message forwarding.\n"
-        "   - Before you use this command, make sure you've set the following:\n"
-        "     - API ID and API Hash\n"
-        "     - Groups to forward messages to\n"
-        "     - The post message\n"
-        "     - Interval for forwarding\n\n"
-
-        "7. <code>/off</code> - Disables message forwarding.\n"
-        "   - This will stop the bot from forwarding messages to any of your groups.\n\n"
-
-        "🔑 <b>API Key and Login Instructions:</b>\n"
-        "   1. <b>To log in:</b>\n"
-        "      - Use the <code>/start</code> command to initiate the bot. If you're not logged in, use the <code>/login</code> (phone number) and complete the verification process.\n"
-        "   2. <b>To add your API keys:</b>\n"
-        "      - Ensure you have your Telegram API ID and API Hash.\n"
-        "      - Use the <code>/api_id</code> and <code>/hash</code> commands to set them up for forwarding. Ensure your API ID and API Hash are correctly configured in your user settings.\n"
-        "      - If you encounter issues with logging in or setting up API keys, check that your credentials are correct and ensure you've completed all required steps.\n\n"
-        
-        "8. <code>/scrape &lt;group_link&gt;</code> - Scrapes members from groups/channels.\n"
-        "   - Example: <code>/scrape https://t.me/groupname</code>\n"
-        "   - Supports public groups, private groups, and channels\n"
-        "   - Use <code>/target</code> to switch between forwarding to groups or scraped users\n"
-        "   - Use <code>/remove_scraped</code> to clear scraped data\n\n"
-
-        "9. <code>/vv</code> - Anti View-Once Media Saver\n"
-        "   - Reply to any view-once media with /vv\n"
-        "   - Saves media to Saved Messages or current chat based on settings\n"
-        "   - Works in both private chats and groups\n"
-        "   - Configure save location in Auto Reply settings\n\n"
-        
-        "10. <code>/addtogc &lt;scraped_group_id&gt; &lt;target_group_link&gt;</code> - Add Scraped Users to Group\n"
-        "   - Example: <code>/addtogc -100123456789 https://t.me/targetgroup</code>\n"
-        "   - Adds users from scraped group to target group\n"
-        "   - Shows success/failure statistics after completion\n"
-        "   - Only users with usernames will be added\n\n"
-
-        "11. <code>/deletedgc &lt;group_link&gt;</code> - Anti-Deleted Messages Monitor\n"
-        "   - Example: <code>/deletedgc https://t.me/myloggroup</code>\n"
-        "   - Sets a group where deleted messages will be forwarded\n"
-        "   - Captures both text and media that gets deleted\n"
-        "   - Must be enabled in Auto Reply settings after setting group\n"
-        "   - Works in both private chats and groups you're in\n\n"
-
-        "12. <code>/conv &lt;amount&gt; &lt;from&gt; &lt;to&gt;</code> - Currency Converter\n"
-        "   - Example: <code>/conv 200 usdt btc</code> converts 200 USDT to BTC\n"
-        "   - Example: <code>/conv 40 usd eur</code> converts 40 USD to EUR\n"
-        "   - Supports various cryptocurrencies and fiat currencies\n"
-        "   - Format: /conv [amount] [from_currency] [to_currency]\n"
-        "   - Also works with <code>/convert</code> and <code>/c</code>\n\n"
-        f"💡 <b>Need more help?</b> Contact the <a href=\"tg://resolve?domain={ADMIN_USERNAME}\">Admin</a> or refer to the tutorial"
-    )
-
+            "🤖 <b>DEVSCOTT AUTO FORWARDING Bot Help</b>\n\n"
+            "<b>Commands:</b>\n"
+            "• <code>/start</code> — Shows your subscription details and quick links.\n"
+            "• <code>/post &lt;message&gt;</code> — Set message(s) to forward. Use <code>/mypost</code> to view, <code>/delpost</code> to remove (by index/message/all).\n"
+            "• <code>/msource</code> — Select message source: My Post (default) or Saved Messages.\n"
+            "• <code>/addgroup &lt;group_link&gt;</code> — Add group(s) to forward messages.\n"
+            "• <code>/delgroup &lt;group_link&gt;</code> — Remove group from your list.\n"
+            "• <code>/time &lt;seconds&gt;</code> — Set forwarding interval.\n"
+            "• <code>/on</code> / <code>/off</code> — Enable/disable forwarding (ensure API ID, groups, post, and interval are set).\n"
+            "• <code>/api_id</code> / <code>/hash</code> — Set up your Telegram API credentials.\n"
+            "• <code>/scrape &lt;group_link&gt;</code> — Scrape users from groups/channels.\n"
+            "   • <code>/target</code> — Switch between forwarding to groups or scraped users.\n"
+            "   • <code>/remove_scraped</code> — Clear scraped data.\n"
+            "• <code>/vv</code> — Save view-once media (reply with /vv).\n"
+            "• <code>/addtogc &lt;scraped_group_id&gt; &lt;target_group_link&gt;</code> — Add scraped users to a group.\n"
+            "• <code>/deletedgc &lt;group_link&gt;</code> — Log deleted messages to a group (enable in settings).\n"
+            "• <code>/conv &lt;amount&gt; &lt;from&gt; &lt;to&gt;</code> — Currency/crypto converter (also: <code>/convert</code>, <code>/c</code>).\n\n"
+            "🔑 <b>Login/API:</b> Use <code>/start</code> and <code>/login</code> to log in, then set <code>/api_id</code> and <code>/hash</code>.\n\n"
+            f"💡 <b>Need more help?</b> Contact <a href=\"tg://resolve?domain={ADMIN_USERNAME}\">Admin</a> or see the tutorial."
+        )
         await query.edit_message_text(text=help_text, parse_mode='HTML', reply_markup=back_button())
+    
     elif query.data == 'settings':
         await settings(update, context) 
 
